@@ -1,0 +1,64 @@
+<div class="hero mb-1">
+  <nav>
+    <a href="/">
+      <img
+        src="https://capricathemes.com/opencart/OPC02/OPC020033/image/catalog/logo.png"
+      />
+    </a>
+
+    <ul>
+      <li>
+        <a href="/">Trang chủ</a>
+      </li>
+      <li>
+        <a href="introduce">Giới thiệu</a>
+      </li>
+      <li class="dropdown">
+        <a href="product">Sản phẩm</a>
+        <ul class="dropdown-content">
+          <li *ngFor="let cate of cates">
+            <a href="search/{{ cate._id }} "> {{ cate.name }} </a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="contact">Liên hệ</a>
+      </li>
+    </ul>
+
+    <div>
+      <button (click)="openDialog()">
+        <i class="fas fa-search fa-lg"></i>
+      </button>
+      <button class="dropdown">
+        <i class="fa-solid fa-user"></i>
+        <ul class="dropdown-content">
+          <li *ngIf="isLoggedIn">
+            <a href="information">Thông tin cá nhân</a>
+            <a href="#">Đơn hàng</a>
+            <button (click)="logout()">Đăng xuất</button>
+          </li>
+          <li *ngIf="!isLoggedIn">
+            <a href="auth/signIn">Đăng nhập</a>
+            <a href="auth/signUp">Đăng ký</a>
+          </li>
+        </ul>
+      </button>
+      <a href="cart">
+        <button>
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span
+            class="cart-total"
+            *ngIf="cart && cart?.products && cart?.products.length"
+            >{{ cart?.products.length }}</span
+          >
+          <span
+            class="cart-total"
+            *ngIf="!cart || !cart?.products || !cart?.products.length"
+            >0</span
+          >
+        </button>
+      </a>
+    </div>
+  </nav>
+</div>

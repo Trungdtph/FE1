@@ -1,0 +1,144 @@
+<!-- <div *ngIf="!isLoading; else loadingContent"> -->
+<div class="flex-1 mt-12 md:mt-2 pb-24 md:pb-5 bg-gray-50 h-screen">
+  <div class="text-center">
+    <div class="p-3 text-2xl text-black">
+      <h3 class="font-bold pl-2">Quản lý người dùng</h3>
+    </div>
+  </div>
+
+  <div class="table-responsive p-3">
+    <table class="table table-hover">
+      <thead class="text-center">
+        <tr>
+          <th scope="col" class="md:w-screen">STT</th>
+          <th scope="col" class="md:w-screen">Tên người dùng</th>
+          <th scope="col" class="md:w-screen">Email</th>
+          <th scope="col" class="md:w-screen">Số điện thoại</th>
+          <th scope="col" class="md:w-screen">Địa chỉ</th>
+          <th scope="col" class="md:w-screen md:table-cell hidden">Mật khẩu</th>
+          <th scope="col" class="md:w-screen">Thao tác</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="
+            let item of users | paginate : { itemsPerPage: 5, currentPage: p };
+            index as i
+          "
+          [ngClass]="{ 'disabled-row': item.isLockAccount === true }"
+        >
+          <th scope="row" class="text-center">{{ i + 1 }}</th>
+          <td class="text-center">
+            <span>{{ item.name }}</span>
+          </td>
+          <td class="text-center">
+            <span>{{ item.email }}</span>
+          </td>
+          <td class="text-center">
+            <span>{{ item.phone }}</span>
+          </td>
+          <td class="text-center">
+            <span>{{ item.address }}</span>
+          </td>
+          <td class="text-center md:table-cell hidden">
+            <span>*********</span>
+          </td>
+          <td>
+            <div class="flex gap-1 justify-center">
+              <button
+                class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#bandUser"
+                (click)="lockAccount(item._id)"
+              >
+                <span>Khóa tài khoản</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-end mr-5 mt-3">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>
+<!-- </div>
+<ng-template #loadingContent>
+  <div class="md:1 lg:2 xl:3">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template> -->
+
+<!-- The Modal -->
+<div class="modal" id="bandUser">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Khóa tài khoản: {{ user?.email }}</h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="select" class="form-label">Thời gian khóa:</label>
+          <select
+            id="select"
+            name="select"
+            class="form-select"
+            [(ngModel)]="selectedValue"
+          >
+            <!-- <option selected>Chọn trạng thái</option> -->
+            <!-- <option value="3 ngày">3 ngày</option>
+            <option value="7 ngày">7 ngày</option> -->
+            <option value="Vĩnh viễn">Vĩnh viễn</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onSubmit(user?._id)"
+          data-bs-toggle="modal"
+          data-bs-target="#alert"
+        >
+          Xác nhận
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="alert">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="alert alert-success">
+          <span>Khóa tài khoản thành công</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

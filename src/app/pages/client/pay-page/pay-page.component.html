@@ -1,0 +1,256 @@
+<main class="container">
+  <h1 class="heading flex justify-center">
+    <i class="fa-solid fa-cart-shopping" name="card-outline"></i>
+    <h2>Thanh toán</h2>
+  </h1>
+
+  <div class="item-flex">
+    <section class="checkout">
+      <h2 class="section-heading">Chi tiết thanh toán</h2>
+
+      <div class="payment-form">
+        <div class="payment-method">
+          <button
+            class="method"
+            [ngClass]="{ selected: activeTab === 0 }"
+            (click)="setPaymentMethod('Thanh toán khi nhận hàng', 0)"
+          >
+            <i
+              class="fa-solid fa-handshake card-outline"
+              name="logo-paypal"
+            ></i>
+
+            <span>Thanh toán khi nhận hàng</span>
+
+            <i
+              class="fa-solid fa-check card-outline checkmark"
+              [ngClass]="{ fill: activeTab === 0 }"
+              name="checkmark-circle-outline"
+            ></i>
+          </button>
+
+          <button
+            class="method"
+            [ngClass]="{ selected: activeTab === 1 }"
+            (click)="setPaymentMethod('Thanh toán bằng thẻ', 1)"
+          >
+            <i class="fa-solid fa-credit-card" name="card"></i>
+
+            <span>Thẻ tín dụng</span>
+
+            <i
+              class="fa-solid fa-check checkmark"
+              [ngClass]="{ fill: activeTab === 1 }"
+              name="checkmark-circle"
+            ></i>
+          </button>
+        </div>
+
+        <form
+          [formGroup]="paymentForm"
+          (ngSubmit)="onHandleSubmit()"
+          [hidden]="activeTab === 0"
+        >
+          <div class="cardholder-name">
+            <label for="cardholder-name" class="label-default"
+              >Tên chủ thẻ</label
+            >
+            <input
+              type="text"
+              formControlName="cardHolderName"
+              id="cardholder-name"
+              class="input-default"
+            />
+          </div>
+
+          <div class="card-number">
+            <label for="card-number" class="label-default">Số thẻ</label>
+            <input
+              type="number"
+              formControlName="cardNumber"
+              id="card-number"
+              class="input-default"
+            />
+          </div>
+
+          <div class="input-flex">
+            <div class="expire-date">
+              <label for="expire-date" class="label-default"
+                >Ngày hết hạn</label
+              >
+              <div class="input-flex">
+                <input
+                  type="number"
+                  formControlName="day"
+                  id="expire-date"
+                  placeholder="31"
+                  min="1"
+                  max="31"
+                  class="input-default"
+                />
+                /
+                <input
+                  type="number"
+                  formControlName="month"
+                  id="expire-date"
+                  placeholder="12"
+                  min="1"
+                  max="12"
+                  class="input-default"
+                />
+              </div>
+            </div>
+
+            <div class="cvv">
+              <label for="cvv" class="label-default">CVV</label>
+              <input
+                type="number"
+                formControlName="cvv"
+                id="cvv"
+                class="input-default"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="text-red-500 text-center p-3">
+        {{ errorMessage }}
+      </div>
+
+      <div class="flex justify-center">
+        <button
+          class="btn btn-primary"
+          (click)="onHandleSubmit()"
+          [disabled]="cart.products.length === 0"
+        >
+          <b>Mua</b>
+          <span *ngIf="totalCalc > 0" id="payAmount">
+            {{ totalCalc.toLocaleString() }}₫
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="cart">
+      <div class="cart-item-box">
+        <h2 class="section-heading flex justify-center border-b pb-3">
+          Tóm tắt
+        </h2>
+        <div
+          class="product-card"
+          *ngFor="
+            let item of cart?.products
+              | paginate : { itemsPerPage: 3, currentPage: p };
+            index as i
+          "
+        >
+          <div class="card">
+            <div class="img-box">
+              <img
+                src="{{ item.product.images?.[0].base_url }}"
+                alt="img"
+                width="80px"
+                class="product-img"
+              />
+            </div>
+
+            <div class="detail">
+              <h4 class="product-name">
+                {{ item.product.name }}
+              </h4>
+              <div class="wrapper">
+                <div class="product-qty">
+                  <!-- <button id="decrement">
+                    <i class="fa-solid fa-minus" name="remove-outline"></i>
+                  </button> -->
+
+                  <span id="quantity">x{{ item.quantity }}</span>
+
+                  <!-- <button id="increment">
+                    <i class="fa-solid fa-plus" name="add-outline"></i>
+                  </button> -->
+                </div>
+
+                <div class="price">
+                  <span id="price">
+                    {{ item.product.price.toLocaleString() }}₫
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- <button class="product-close-btn">
+              <i class="fa-solid fa-xmark" name="close-outline"></i>
+            </button> -->
+          </div>
+        </div>
+
+        <div class="flex justify-end mr-5 mt-3">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </div>
+
+      <div class="wrapper">
+        <div class="discount-token">
+          <label for="discount-token" class="label-default"
+            >Thẻ quà tặng/Mã giảm giá</label
+          >
+
+          <form [formGroup]="discountForm" (ngSubmit)="applyDiscount()">
+            <div class="wrapper-flex">
+              <input
+                type="text"
+                name="discount-token"
+                id="discount-token"
+                class="default-input"
+                formControlName="code"
+              />
+
+              <button class="btn btn-outline">Dùng</button>
+            </div>
+          </form>
+
+          <div class="text-red-500 text-center p-3">
+            {{ errorMessage }}
+          </div>
+
+          <div class="product-card" *ngFor="let item of discount; index as i">
+            <div class="border p-3">
+              <span id="quantity">{{ item.name }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="amount">
+          <div class="subtotal">
+            <span>Tổng phụ</span>
+            <span>
+              <span id="subtotal"
+                >{{ cart?.totalPrice.toLocaleString() }}₫</span
+              >
+            </span>
+          </div>
+          <div class="tax">
+            <span>Thuế</span>
+            <span>
+              <span id="tax">{{ tax.toLocaleString() }}₫</span>
+            </span>
+          </div>
+          <div class="shipping">
+            <span>Phí vận chuyển</span>
+            <span>
+              <span id="shipping">{{ shipping.toLocaleString() }}₫</span>
+            </span>
+          </div>
+          <div class="total border-t">
+            <span>Tổng</span>
+            <span>
+              <span id="total"> {{ totalCalc.toLocaleString() }}₫ </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

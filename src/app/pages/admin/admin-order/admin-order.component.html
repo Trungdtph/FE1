@@ -1,0 +1,174 @@
+<div class="flex-1 mt-12 md:mt-2 pb-24 md:pb-5 bg-gray-50 h-screen">
+  <div class="text-center">
+    <div class="p-3 text-2xl text-black">
+      <h3 class="font-bold pl-2">Quản lý đơn hàng</h3>
+    </div>
+  </div>
+
+  <div class="table-responsive p-3">
+    <table class="table table-hover">
+      <thead class="text-center">
+        <tr>
+          <th scope="col" class="md:w-screen">STT</th>
+          <th scope="col" class="md:w-screen">Người mua</th>
+          <th scope="col" class="md:w-screen">Sản phẩm</th>
+          <th scope="col" class="md:w-screen">Tổng giá</th>
+          <th scope="col" class="md:w-screen">Trạng thái</th>
+          <th scope="col" class="md:w-screen">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of orders | paginate : { itemsPerPage: 8, currentPage: p };
+            index as i
+          "
+        >
+          <th scope="row" class="text-center">1</th>
+          <td class="text-center">
+            <span>{{ item.user.name }}</span>
+          </td>
+          <td class="text-center">
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#details"
+              (click)="getOrder(item._id)"
+            >
+              <span> Chi tiết </span>
+            </button>
+          </td>
+          <td class="text-center">
+            <span>{{ item.totalPrice }}đ</span>
+          </td>
+          <td class="text-center">
+            <span>{{ item.status }}</span>
+          </td>
+          <td>
+            <div class="flex gap-1 justify-center">
+              <button
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#updateStatus"
+                (click)="getOrder(item._id)"
+              >
+                <span>Cập nhật trạng thái</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-end mr-5 mt-3">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>
+
+<!-- The Modal Orders-->
+<div class="modal" id="updateStatus">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Trạng thái đơn hàng</h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form-group">
+          <form [formGroup]="orderForm" (ngSubmit)="onSubmit(order._id)">
+            <label for="select" class="form-label">Chọn trạng thái:</label>
+            <select id="select" formControlName="status" class="form-select">
+              <option value="">Chọn trạng thái</option>
+              <option value="Chờ thanh toán">Chờ thanh toán</option>
+              <option value="Đang xử lý">Đang xử lý</option>
+              <option value="Đang giao hàng">Đang giao hàng</option>
+              <option value="Đã giao hàng">Đã giao hàng</option>
+              <option value="Đã hủy">Đã hủy</option>
+              <option value="Đã hoàn tiền">Đã hoàn tiền</option>
+              <option value="Đã hoàn thành">Đã hoàn thành</option>
+            </select>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onSubmit(order._id)"
+          data-bs-toggle="modal"
+          data-bs-target="#alert"
+        >
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal Success Order-->
+<div class="modal" id="alert">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="alert alert-success">
+          <span>Cập nhật trạng thái thành công!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal Detail Product Order -->
+<div class="modal" id="details">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Thông tin đơn hàng</h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div *ngFor="let item of order?.products; index as i">
+          <div class="flex">
+            <img
+              src="{{ item.product.images?.[0].base_url }}"
+              alt="img"
+              width="80"
+              height="80"
+            />
+            <div class="grid ml-5">
+              <span>{{ item.product.name }}</span>
+              <span>{{ item.product.price }}đ</span>
+              <span>x{{ item.quantity }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

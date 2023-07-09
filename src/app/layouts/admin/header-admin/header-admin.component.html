@@ -1,0 +1,72 @@
+<nav
+  class="bg-gradient-to-r from-gray-200 to-gray-100 bg-gray-800 pt-2 md:pt-1 pb-1 px-1 mt-0 h-16 fixed w-full z-20 top-0 md:h-24"
+>
+  <div class="grid grid-cols-3 h-14">
+    <ul class="flex pt-2">
+      <li class="flex justify-center items-center md:pt-3 mt-[-10px]">
+        <a
+          href="/"
+          class="block py-1 md:py-3 pl-1 align-middle text-black no-underline border-gray-800 md:text-left"
+        >
+          <button class="hover:text-blue-500">
+            <i class="fas fa-home pr-0 md:pr-1"></i>
+            <span
+              class="pb-1 md:pb-0 text-xs md:text-base md:text-black block md:inline-block hover:text-blue-500"
+              >Trang chủ</span
+            >
+          </button>
+        </a>
+      </li>
+    </ul>
+
+    <div></div>
+
+    <ul class="flex mt-2">
+      <li
+        class="flex justify-center items-center mt-[-10px] ml-[6rem] md:mt-auto md:ml-[-10vh] lg:ml-[2rem] xl:ml-[11rem]"
+      >
+        <button
+          class="text-white focus:outline-none md:mt-2"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#information"
+        >
+          <img
+            src="https://thuthuatnhanh.com/wp-content/uploads/2023/03/hinh-anh-cuc-tinh-y.jpg"
+            class="md:w-[50px] md:h-[50px] h-[30px] w-[30px] rounded-[50%]"
+            alt="user"
+          />
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Offcanvas Sidebar -->
+<div class="offcanvas offcanvas-end card" id="information">
+  <div class="card_img">
+    <img
+      src="https://thuthuatnhanh.com/wp-content/uploads/2023/03/hinh-anh-cuc-tinh-y.jpg"
+      alt="user"
+    />
+  </div>
+  <h2>Trần Văn Lương</h2>
+  <p>Full Stack Developer</p>
+  <div class="card_social">
+    <a href="https://www.facebook.com/tranvanluong9703" target="_blank">
+      <i class="fa-brands fa-facebook"></i>
+    </a>
+    <a href="https://www.instagram.com/tvl.03.alone/" target="_blank">
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+    <a href="https://github.com/tranluong460" target="_blank"
+      ><i class="fa-brands fa-github"></i
+    ></a>
+    <a
+      href="https://www.youtube.com/channel/UCWCAV4SbnjKkE1jxn_EQNqA"
+      target="_blank"
+    >
+      <i class="fa-brands fa-youtube"></i>
+    </a>
+  </div>
+  <button (click)="logOut()">Đăng xuất</button>
+</div>
